@@ -51,7 +51,9 @@ public class BoardDao {
 	
 	public Board getBoard(Connection conn, int bno) {
 		Board vo = null;
-		String sql = "select bno, bref, bre_level, bre_step from board_r where bno = ?";
+		String sql = "select bno, bref, bre_level, bre_step,"
+				+ " title, content, create_Date, writer, delete_Yn"
+				+ " from board_r where bno = ?";
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
@@ -65,6 +67,12 @@ public class BoardDao {
 				vo.setBref(rset.getInt(2));
 				vo.setBreLevel(rset.getInt(3));
 				vo.setBreStep(rset.getInt(4));
+				vo.setTitle(rset.getString("title"));
+				vo.setContent(rset.getString("content"));
+				vo.setCreateDate(rset.getDate("create_Date"));
+				vo.setWriter(rset.getString("writer"));
+				vo.setDeleteYn(rset.getString("delete_Yn"));
+				
 			}
 		} catch(Exception e) {
 			e.printStackTrace();

@@ -39,7 +39,7 @@ public class BoardListServlet extends HttpServlet {
 		
 		PrintWriter out  = response.getWriter();
 		
-		final int PAGE_SIZE = 5; // 한 페이지 당 글 수
+		final int PAGE_SIZE = 20; // 한 페이지 당 글 수
 		final int PAGE_BLOCK = 3; // 한 화면에 나타날 페이지 링크 수
 		int bCount = 0; // 총 글수
 		int pageCount = 0; // 총 페이지수
@@ -72,23 +72,14 @@ public class BoardListServlet extends HttpServlet {
 		if(endPage > pageCount) endPage = pageCount;
 		
 		ArrayList<Board> volist  = new BoardService().selectBoardList(startRnum,endRnum);
-		for (Board vo : volist) {
-			out.println("<p>" + "💡 글번호 : " + vo.getBno() + "</p>");
-			out.println("<p>" + "✏ 글제목 : " + vo.getTitle() + "</p>");
-			out.println("<p>" + "📑 내용 : " + vo.getContent() + "</p>");
-			out.println("<p>" + "📆 작성일 : " + vo.getCreateDate() + "</p>");
-			out.println("<p>" + "🖋 작성자 : " + vo.getWriter() + "</p>");
-			out.println("<p>" + "❌ 삭제여부 : " + vo.getDeleteYn() + "</p>");
-			out.println("<p>" + "-------------------------" + "</p>");
-	}
-		if(startPage>1) out.println("👈🏻이전  ");
-		for(int i = startPage; i<=endPage; i++) {
-			out.print(i);
-			if(i!=endPage) {
-				out.println(", ");
-			}
-		}
-		if(endPage<pageCount) out.println(" 다음👉🏻");
+		
+		request.setAttribute("boardvolist", volist);
+		request.setAttribute("startPage", startPage);
+		request.setAttribute("endPage", endPage);
+		request.setAttribute("pageCount", pageCount);
+		
+		request.getRequestDispatcher("/boardlist.jsp").forward(request, response);
+				
 	}
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
